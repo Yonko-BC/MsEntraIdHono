@@ -36,7 +36,7 @@ auth.get("/redirect", async (c) => {
       secure: true,
       sameSite: "Lax",
     });
-    return c.redirect("/");
+    return c.redirect(config.frontendUrl);
   } catch (error) {
     console.error(error);
     return c.text("Authentication failed", 401);

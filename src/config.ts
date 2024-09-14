@@ -5,6 +5,7 @@ dotenv.config();
 
 export interface AppConfig {
   port: number;
+  frontendUrl: string;
   entraId: {
     clientId: string;
     tenantId: string;
@@ -17,6 +18,7 @@ export interface AppConfig {
 
 export const config: AppConfig = {
   port: Number(process.env.PORT) || 3000,
+  frontendUrl: process.env.FRONTEND_URL || "http://localhost:8080",
   entraId: {
     clientId: process.env.ENTRA_CLIENT_ID!,
     tenantId: process.env.ENTRA_TENANT_ID!,
