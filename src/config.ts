@@ -14,6 +14,8 @@ export interface AppConfig {
     authority: string;
   };
   sessionSecret: string;
+  jwtSecret: string;
+  jwtRefreshSecret: string;
 }
 
 export const config: AppConfig = {
@@ -27,6 +29,8 @@ export const config: AppConfig = {
     authority: `https://${process.env.TENANT_SUBDOMAIN}.ciamlogin.com/`,
   },
   sessionSecret: process.env.SESSION_SECRET!,
+  jwtSecret: "yonko",
+  jwtRefreshSecret: "yonko",
 };
 
 let msalClient: ConfidentialClientApplication;

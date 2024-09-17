@@ -13,18 +13,20 @@ const app = new Hono();
 
 // Middleware
 app.use("*", logger());
-app.use("*", errorHandler);
-app.use("*", sessionMiddleware);
-app.use("*", csrfProtection);
 app.use(
   "*",
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:8080",
+    origin: [process.env.FRONTEND_URL || "http://localhost:8080"],
     credentials: true,
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowHeaders: ["Content-Type", "Authorization"],
+    allowHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
+    exposeHeaders: ["Content-Length", "X-CSRF-Token"],
+    maxAge: 600,
   })
 );
+app.use("*", errorHandler);
+app.use("*", sessionMiddleware);
+app.use("*", csrfProtection);
 
 // Routes
 app.route("/auth", authRoutes);
