@@ -7,8 +7,10 @@ interface UserEnv {
     user: {
       id?: number;
       username?: string;
+      sub?: string;
       email: string;
       role: string;
+      roles?: string[];
       tenantId?: string;
       authType: "azure" | "local";
     } | null;
@@ -34,10 +36,15 @@ user.get("/profile", async (c) => {
 
   if (user.authType === "azure") {
     const msalClient = getMsalClient();
-
     try {
-      const accounts = await msalClient.getTokenCache().getAllAccounts();
-      const account = accounts.find((acc) => acc.username === user.email);
+      const user = c.get("user");
+      if (!user?.sub) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+      const account = await msalClient
+        .getTokenCache()
+        .getAccountByHomeId(user.sub);
+
       if (!account) {
         throw new Error("No account found for the user");
       }
